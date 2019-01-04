@@ -3,6 +3,7 @@ module Language.Dart.Pretty
   , prettyPrint
   ) where
 
+import Prelude hiding ((<>))
 import Data.Char (toLower)
 import Data.List (partition)
 import Text.PrettyPrint
