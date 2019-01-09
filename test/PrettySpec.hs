@@ -275,13 +275,17 @@ finally
       prettyPrint clazz `shouldBe` [r|class Point
 {
   num x;
+
   num y;
+
   Point(this.x, this.y);
+
   Point.fromJson(Map json)
   {
     x = json["x"];
     y = json["y"];
   }
+
   num distanceTo(Point other)
   {
     var dx = x - other.x;

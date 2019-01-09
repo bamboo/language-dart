@@ -5,7 +5,7 @@ module Language.Dart.Pretty
 
 import Prelude hiding ((<>))
 import Data.Char (toLower)
-import Data.List (partition)
+import Data.List (partition, intersperse)
 import Text.PrettyPrint
 import Text.Printf (printf)
 
@@ -598,7 +598,7 @@ instance Pretty NamedCompilationUnitMember where
            , maybePP p mExtendsClause
            , maybePP p mWithClause
            , maybePP p mImplementsClause
-           ] $$ braceBlock (map (prettyPrec p) members)
+           ] $$ braceBlock [lineSeparated (map (prettyPrec p) members)]
 
 instance Pretty CompilationUnitMember where
   prettyPrec p (TopLevelVariableDeclaration _ metadata variableList) =
@@ -611,7 +611,10 @@ instance Pretty ScriptTag where
 
 instance Pretty CompilationUnit where
   prettyPrec p (CompilationUnit mScriptTag dirs members) =
-    vcat $ [maybePP p mScriptTag] ++ map (prettyPrec p) dirs ++ map (prettyPrec p) members
+    vcat $ [maybePP p mScriptTag] ++ map (prettyPrec p) dirs ++ [lineSeparated (map (prettyPrec p) members)]
+
+lineSeparated :: [Doc] -> Doc
+lineSeparated = vcat . intersperse emptyLine
 
 emptyLine = zeroWidthText ""
 
