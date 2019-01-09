@@ -114,7 +114,7 @@ instance Pretty Directive where
 
   prettyPrec p (LibraryDirective _ metadata libraryName) =
     ppMetadata p metadata $$
-      text "library" <> prettyPrec p libraryName <> semi
+      (hsep [text "library", prettyPrec p libraryName] <> semi) $$ emptyLine
 
 instance Pretty AsyncModifier where
   prettyPrec p AsyncStar  = text "async*"
@@ -612,6 +612,8 @@ instance Pretty ScriptTag where
 instance Pretty CompilationUnit where
   prettyPrec p (CompilationUnit mScriptTag dirs members) =
     vcat $ [maybePP p mScriptTag] ++ map (prettyPrec p) dirs ++ map (prettyPrec p) members
+
+emptyLine = zeroWidthText ""
 
 ppMetadata :: Int -> [Annotation] -> Doc
 ppMetadata p metadata = vcat (map (prettyPrec p) metadata)
